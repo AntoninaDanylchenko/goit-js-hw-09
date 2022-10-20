@@ -15,8 +15,8 @@ function onBtnStartClick(e) {
   refs.btnStartEl.disabled = true;
   refs.btnStopEl.disabled = false;
   timerId = setInterval(() => {
-    // const colorBackgroundBody = getRandomHexColor();
-    refs.bodyEl.style.backgroundColor = getRandomHexColor();
+    const colorBackgroundBody = getRandomHexColor();
+    refs.bodyEl.style.backgroundColor = colorBackgroundBody;
   }, 1000);
 }
 
