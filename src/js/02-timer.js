@@ -20,8 +20,7 @@ const options = {
         );
       } else {
         startBtnEl.disabled = false;
-        timerTime = selectedTime - isTodaySek;
-        return timerTime;
+        return selectedTime;
       }
     }
   },
@@ -49,13 +48,12 @@ function onStartTimerBtnClick() {
   startBtnEl.disabled = true;
   const timmerObj = convertMs(timerTime);
   const timmerArray = Object.values(timmerObj);
-  console.log(timmerArray[2].length);
 
   for (let i = 0; i < 4; i += 1) {
-    dataSpanEl[i].textContent = timmerArray[i];
-    //   timmerArray[i].toString.length < 2
-    //     ? `0${timmerArray[i]}`
-    //     : timmerArray[i];
+    dataSpanEl[i].textContent =
+      timmerArray[i].toString().length < 2
+        ? `0${timmerArray[i]}`
+        : timmerArray[i];
   }
 }
 
