@@ -4,6 +4,8 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import Notiflix from 'notiflix';
 
+let selectedTime = 0;
+
 const options = {
   enableTime: true,
   time_24hr: true,
@@ -11,13 +13,10 @@ const options = {
   minuteIncrement: 1,
   onClose(selectedDates) {
     if (selectedDates.length > 0) {
-      const selectedTime = selectedDates[0].getTime();
+      selectedTime = selectedDates[0].getTime();
 
       if (selectedTime < isTodaySek) {
-        Notiflix.Report.warning(
-          'Warning',
-          'Please choose a date in the future'
-        );
+        Notiflix.Notify.failure('Please choose a date in the future');
       } else {
         startBtnEl.disabled = false;
         return selectedTime;
@@ -29,31 +28,39 @@ const options = {
 const myInput = document.getElementById('datetime-picker');
 const startBtnEl = document.querySelector('[data-start]');
 const dataSpanEl = document.querySelectorAll('.value');
-
-const isToday = new Date();
-const isTodaySek = isToday.getTime();
-
+let isToday = new Date();
+let isTodaySek = isToday.getTime();
 let timerTime = 0;
 
-flatpickr(myInput, options);
+fp = flatpickr(myInput, options);
 
 startBtnEl.disabled = true;
 startBtnEl.addEventListener('click', onStartTimerBtnClick);
 
 function onStartTimerBtnClick() {
-  if (timerTime < 0) {
-    console.log('timerTime < 0');
-    return;
-  }
   startBtnEl.disabled = true;
-  const timmerObj = convertMs(timerTime);
-  const timmerArray = Object.values(timmerObj);
+
+  const timerIdTwo = setInterval(() => {
+    if (timerTime < 0) {
+      Notiflix.Notify.success('Huraaay! Time is out!');
+      window.clearInterval(timerIdTwo);
+      return;
+    }
+    findsTimeDifference();
+  }, 1000);
+}
+
+function findsTimeDifference() {
+  isToday = new Date();
+  isTodaySek = isToday.getTime();
+  timerTime = selectedTime - isTodaySek;
+  if (timerTime < 0) {
+    return timerTime;
+  }
+  const timmerArray = Object.values(convertMs(timerTime));
 
   for (let i = 0; i < 4; i += 1) {
-    dataSpanEl[i].textContent =
-      timmerArray[i].toString().length < 2
-        ? `0${timmerArray[i]}`
-        : timmerArray[i];
+    dataSpanEl[i].textContent = addLeadingZero(timmerArray)[i];
   }
 }
 
@@ -74,4 +81,9 @@ function convertMs(ms) {
   const seconds = Math.floor((((ms % day) % hour) % minute) / second);
 
   return { days, hours, minutes, seconds };
+}
+function addLeadingZero(array) {
+  return array.map(value =>
+    value.toString().length < 2 ? value.toString().padStart(2, '0') : value
+  );
 }
