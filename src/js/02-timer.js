@@ -32,7 +32,7 @@ let isToday = new Date();
 let isTodaySek = isToday.getTime();
 let timerTime = 0;
 
-fp = flatpickr(myInput, options);
+flatpickr(myInput, options);
 
 startBtnEl.disabled = true;
 startBtnEl.addEventListener('click', onStartTimerBtnClick);
