@@ -13,8 +13,9 @@ function onInputElements(e) {
 function onFormSubmit(ev) {
   ev.preventDefault();
   let stepPromise = datasForm.delay;
+
   for (let i = 1; i <= datasForm.amount; i += 1) {
-    createPromise(i, datasForm.delay)
+    createPromise(i, stepPromise)
       .then(succes => Notiflix.Notify.success(succes))
       .catch(erroy => Notiflix.Notify.failure(erroy));
 
