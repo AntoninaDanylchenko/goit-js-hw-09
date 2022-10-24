@@ -17,7 +17,7 @@ function onFormSubmit(ev) {
   for (let i = 1; i <= datasForm.amount; i += 1) {
     createPromise(i, stepPromise)
       .then(succes => Notiflix.Notify.success(succes))
-      .catch(erroy => Notiflix.Notify.failure(erroy));
+      .catch(error => Notiflix.Notify.failure(error));
 
     stepPromise += datasForm.step;
   }
